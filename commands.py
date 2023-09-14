@@ -1,6 +1,8 @@
-import os, logging, random, asyncio, re, sys, json, base64, math, time, requests, shutil
+import os
+import logging
+import random
+import asyncio
 from Script import script
-import shutil
 from pyrogram import Client, filters, enums
 from pyrogram.errors import ChatAdminRequired, FloodWait
 from pyrogram.types import *
@@ -10,60 +12,51 @@ from info import CHANNELS, ADMINS, AUTH_CHANNEL, LOG_CHANNEL, PICS, BATCH_FILE_C
 from utils import get_settings, get_size, is_subscribed, save_group_settings, temp, verify_user, check_token, check_verification, get_token, get_shortlink, get_tutorial
 from database.connections_mdb import active_connection
 from plugins.pm_filter import ENABLE_SHORTLINK
+import re, asyncio, os, sys
+import json
+import base64
 logger = logging.getLogger(__name__)
 
 BATCH_FILES = {}
-BOT_START_TIME = time.time()
-BUTTONSHORT = [[InlineKeyboardButton("DIDN'T UNDERSTAND", url=f"https://t.me/{temp.U_NAME}?start=earnen")]]
 
 @Client.on_message(filters.command("start") & filters.incoming)
 async def start(client, message):
     if message.chat.type in [enums.ChatType.GROUP, enums.ChatType.SUPERGROUP]:
         buttons = [[
-                    InlineKeyboardButton('⤬ Aᴅᴅ Mᴇ Tᴏ Yᴏᴜʀ Gʀᴏᴜᴘ ⤬', url=f'http://telegram.me/{temp.U_NAME}?startgroup=true')
+                    InlineKeyboardButton('⤬ Aᴅᴅ Mᴇ Tᴏ Yᴏᴜʀ Gʀᴏᴜᴘ ⤬', url=f'http://t.me/{temp.U_NAME}?startgroup=true')
                 ],[
-                    InlineKeyboardButton('💸 Eᴀʀɴ Mᴏɴᴇʏ 💸', url=f"https://t.me/{temp.U_NAME}?start=earnen"),
-                    InlineKeyboardButton('🤠 SET F SUB 🤠', url=f"https://t.me/{temp.U_NAME}?start=fsuben")
+                    InlineKeyboardButton('✪ Sᴜᴘᴘᴏʀᴛ Gʀᴏᴜᴘ', url="https://t.me/+r9ArDaaCETE0OGU9"),
+                    InlineKeyboardButton('⌬ Mᴏᴠɪᴇ Gʀᴏᴜᴘ', url=GRP_LNK)
                 ],[
-                    InlineKeyboardButton('〄 Hᴇʟᴘ', callback_data='help'),
-                    InlineKeyboardButton('⍟ Aʙᴏᴜᴛ', callback_data='about')
-                ],[
-                    InlineKeyboardButton("SHARE THIS BOT", url=f"https://t.me/share/url?url=Hello%20%F0%9F%91%8B%0A%0AI%20JUST%20FOUND%20%F0%9F%A5%B3%0AAn%20OUSOME%20MOVIE%20/%20SERIES%20Provide%20bot%0A%0AClick%20to%20know%0A%40{temp.U_NAME}%0A/Start%20on%20this%20bot"),
-                ],[
-                    InlineKeyboardButton('❤️ MORE FUNCTION ❤️', url=f"https://t.me/{temp.U_NAME}?start=more"),
-                    InlineKeyboardButton('✨ PREMIUM USERS ✨', url=f"https://t.me/{temp.U_NAME}?start=prime_plans")
-                ],[
-                    InlineKeyboardButton('❤️🌄 CHANGE PHOTO 🌄❤️', callback_data='start')
+                    InlineKeyboardButton('✇ Jᴏɪɴ Uᴘᴅᴀᴛᴇs Cʜᴀɴɴᴇʟ ✇', url=CHNL_LNK)
                   ]]
         reply_markup = InlineKeyboardMarkup(buttons)
         await message.reply(script.START_TXT.format(message.from_user.mention if message.from_user else message.chat.title, temp.U_NAME, temp.B_NAME), reply_markup=reply_markup, disable_web_page_preview=True)
         await asyncio.sleep(2) # 😢 https://github.com/EvamariaTG/EvaMaria/blob/master/plugins/p_ttishow.py#L17 😬 wait a bit, before checking.
         if not await db.get_chat(message.chat.id):
             total=await client.get_chat_members_count(message.chat.id)
-            await client.send_message(LOG_CHANNEL, script.LOG_TEXT_G.format(message.chat.title, message.chat.id, message.chat.username, total, "Unknown", temp.B_LINK))       
+            await client.send_message(LOG_CHANNEL, script.LOG_TEXT_G.format(message.chat.title, message.chat.id, total, "Unknown"))       
             await db.add_chat(message.chat.id, message.chat.title)
         return 
     if not await db.is_user_exist(message.from_user.id):
         await db.add_user(message.from_user.id, message.from_user.first_name)
-        await client.send_message(LOG_CHANNEL, script.LOG_TEXT_P.format(message.from_user.id, message.from_user.mention, message.from_user.username, temp.B_LINK))
+        await client.send_message(LOG_CHANNEL, script.LOG_TEXT_P.format(message.from_user.id, message.from_user.mention))
     if len(message.command) != 2:
         buttons = [[
-                    InlineKeyboardButton('⤬ Aᴅᴅ Mᴇ Tᴏ Yᴏᴜʀ Gʀᴏᴜᴘ ⤬', url=f'http://telegram.me/{temp.U_NAME}?startgroup=true')
+                    InlineKeyboardButton('⤬ Aᴅᴅ Mᴇ Tᴏ Yᴏᴜʀ Gʀᴏᴜᴘ ⤬', url=f'http://t.me/{temp.U_NAME}?startgroup=true')
                 ],[
-                    InlineKeyboardButton('💸 Eᴀʀɴ Mᴏɴᴇʏ 💸', url=f"https://t.me/{temp.U_NAME}?start=earnen"),
-                    InlineKeyboardButton('🤠 SET F SUB 🤠', url=f"https://t.me/{temp.U_NAME}?start=fsuben")
+                    InlineKeyboardButton('Eᴀʀɴ Mᴏɴᴇʏ 💸', callback_data="shortlink_info"),
+                    InlineKeyboardButton('⌬ Mᴏᴠɪᴇ Gʀᴏᴜᴘ', url=GRP_LNK)
                 ],[
                     InlineKeyboardButton('〄 Hᴇʟᴘ', callback_data='help'),
                     InlineKeyboardButton('⍟ Aʙᴏᴜᴛ', callback_data='about')
                 ],[
-                    InlineKeyboardButton("SHARE THIS BOT", url=f"https://t.me/share/url?url=Hello%20%F0%9F%91%8B%0A%0AI%20JUST%20FOUND%20%F0%9F%A5%B3%0AAn%20OUSOME%20MOVIE%20/%20SERIES%20Provide%20bot%0A%0AClick%20to%20know%0A%40{temp.U_NAME}%0A/Start%20on%20this%20bot"),
-                ],[
-                    InlineKeyboardButton('❤️ MORE FUNCTION ❤️', url=f"https://t.me/{temp.U_NAME}?start=more"),
-                    InlineKeyboardButton('✨ PREMIUM USERS ✨', url=f"https://t.me/{temp.U_NAME}?start=prime_plans")
-                ],[
-                    InlineKeyboardButton('❤️🌄 CHANGE PHOTO 🌄❤️', callback_data='start')
+                    InlineKeyboardButton('✇ Jᴏɪɴ Uᴘᴅᴀᴛᴇs Cʜᴀɴɴᴇʟ ✇', url=CHNL_LNK)
                   ]]
         reply_markup = InlineKeyboardMarkup(buttons)
+        m=await message.reply_sticker("CAACAgUAAxkBAAIBYmOkbpQ0brb4z4ggbPv4peTgcDb-AAIlBQACSr5ZVk64AdT0N9vYHgQ") 
+        await asyncio.sleep(1)
+        await m.delete()
         await message.reply_photo(
             photo=random.choice(PICS),
             caption=script.START_TXT.format(message.from_user.mention, temp.U_NAME, temp.B_NAME),
@@ -101,263 +94,20 @@ async def start(client, message):
         return
     if len(message.command) == 2 and message.command[1] in ["subscribe", "error", "okay", "help"]:
         buttons = [[
-                    InlineKeyboardButton('⤬ Aᴅᴅ Mᴇ Tᴏ Yᴏᴜʀ Gʀᴏᴜᴘ ⤬', url=f'http://telegram.me/{temp.U_NAME}?startgroup=true')
+                    InlineKeyboardButton('⤬ Aᴅᴅ Mᴇ Tᴏ Yᴏᴜʀ Gʀᴏᴜᴘ ⤬', url=f'http://t.me/{temp.U_NAME}?startgroup=true')
                 ],[
-                    InlineKeyboardButton('💸 Eᴀʀɴ Mᴏɴᴇʏ 💸', url=f"https://t.me/{temp.U_NAME}?start=earnen"),
-                    InlineKeyboardButton('🤠 SET F SUB 🤠', url=f"https://t.me/{temp.U_NAME}?start=fsuben")
+                    InlineKeyboardButton('Eᴀʀɴ Mᴏɴᴇʏ 💸', callback_data="shortlink_info"),
+                    InlineKeyboardButton('⌬ Mᴏᴠɪᴇ Gʀᴏᴜᴘ', url=GRP_LNK)
                 ],[
                     InlineKeyboardButton('〄 Hᴇʟᴘ', callback_data='help'),
                     InlineKeyboardButton('⍟ Aʙᴏᴜᴛ', callback_data='about')
                 ],[
-                    InlineKeyboardButton("SHARE THIS BOT", url=f"https://t.me/share/url?url=Hello%20%F0%9F%91%8B%0A%0AI%20JUST%20FOUND%20%F0%9F%A5%B3%0AAn%20OUSOME%20MOVIE%20/%20SERIES%20Provide%20bot%0A%0AClick%20to%20know%0A%40{temp.U_NAME}%0A/Start%20on%20this%20bot"),
-                ],[
-                    InlineKeyboardButton('❤️ MORE FUNCTION ❤️', url=f"https://t.me/{temp.U_NAME}?start=more"),
-                    InlineKeyboardButton('✨ PREMIUM USERS ✨', url=f"https://t.me/{temp.U_NAME}?start=prime_plans")
-                ],[
-                    InlineKeyboardButton('❤️🌄 CHANGE PHOTO 🌄❤️', callback_data='start')
+                    InlineKeyboardButton('✇ Jᴏɪɴ Uᴘᴅᴀᴛᴇs Cʜᴀɴɴᴇʟ ✇', url=CHNL_LNK)
                   ]]
         reply_markup = InlineKeyboardMarkup(buttons)      
         await message.reply_photo(
             photo=random.choice(PICS),
             caption=script.START_TXT.format(message.from_user.mention, temp.U_NAME, temp.B_NAME),
-            reply_markup=reply_markup,
-            parse_mode=enums.ParseMode.HTML
-        )
-        return
-    data = message.command[1]
-    try:
-        pre, file_id = data.split('_', 1)
-    except:
-        file_id = data
-        pre = ""
-    if len(message.command) == 2 and message.command[1] in ["status"]:
-        buttons = [[
-            InlineKeyboardButton("REFRESH", url=f"https://t.me/{temp.U_NAME}?start=status")
-        ]]
-        reply_markup = InlineKeyboardMarkup(buttons)
-        uptime = time.strftime("%Hh %Mm %Ss", time.gmtime(time.time() - BOT_START_TIME))
-        total = await Media.count_documents()
-        users = await db.total_users_count()
-        chats = await db.total_chat_count()
-        monsize = await db.get_db_size()
-        free = 536870912 - monsize
-        monsize = get_size(monsize)
-        free = get_size(free)
-        #t, u, f = shutil.disk_usage(".")
-        #totald = humanbytes(t)
-        #usedd = humanbytes(u)
-        #freed = humanbytes(f)
-        await message.reply_photo(
-            photo=random.choice(PICS),
-            caption=script.STATUS_TXT.format(uptime, total, total, users, users, chats, chats, monsize, free, temp.B_LINK),
-            reply_markup=reply_markup,
-            parse_mode=enums.ParseMode.HTML
-        )
-        return
-    data = message.command[1]
-    try:
-        pre, file_id = data.split('_', 1)
-    except:
-        file_id = data
-        pre = ""
-    if len(message.command) == 2 and message.command[1] in ["earnen"]:
-        buttons = [[
-            InlineKeyboardButton("SIGN UP", url=f"https://mdiskshortner.link/ref/FreyaAllan"),
-            ],[
-            InlineKeyboardButton("DEV API", url=f"https://mdiskshortner.link/member/tools/api"),
-            ],[
-            InlineKeyboardButton("ADD GROUP", url=f"https://t.me/{temp.U_NAME}?startgroup=true"),
-            ],[
-            InlineKeyboardButton("HINDI", url=f"https://t.me/{temp.U_NAME}?start=earnhi"),
-            ],[
-            InlineKeyboardButton("GUJARATI", url=f"https://t.me/{temp.U_NAME}?start=earngu")
-            ],[
-            InlineKeyboardButton("SHARE THIS BOT", url=f"https://t.me/share/url?url=Hello%20%F0%9F%91%8B%0A%0AI%20JUST%20FOUND%20%F0%9F%A5%B3%0AAn%20OUSOME%20MOVIE%20/%20SERIES%20Provide%20bot%0A%0AClick%20to%20know%0A%40{temp.U_NAME}%0A/Start%20on%20this%20bot"),
-            ],[
-            InlineKeyboardButton("OTHER", url=f"https://www.google.com/search?q=translate&oq=tra&gs_lcrp=")
-        ]]
-        reply_markup = InlineKeyboardMarkup(buttons)
-        await message.reply_photo(
-            photo="https://graph.org/file/e4b64f05f0ad6959b8603.jpg",
-            caption=script.EARN_TXT,
-            reply_markup=reply_markup,
-            parse_mode=enums.ParseMode.HTML
-        )
-        return
-    data = message.command[1]
-    try:
-        pre, file_id = data.split('_', 1)
-    except:
-        file_id = data
-        pre = ""
-    if len(message.command) == 2 and message.command[1] in ["earnhi"]:
-        buttons = [[
-            InlineKeyboardButton("SIGN UP", url=f"https://mdiskshortner.link/ref/FreyaAllan"),
-            ],[
-            InlineKeyboardButton("DEV API", url=f"https://mdiskshortner.link/member/tools/api"),
-            ],[
-            InlineKeyboardButton("ADD GROUP", url=f"https://t.me/{temp.U_NAME}?startgroup=true"),
-            ],[
-            InlineKeyboardButton("ENGLISH", url=f"https://t.me/{temp.U_NAME}?start=earnen"),
-            ],[
-            InlineKeyboardButton("GUJARATI", url=f"https://t.me/{temp.U_NAME}?start=earngu")
-            ],[
-            InlineKeyboardButton("SHARE THIS BOT", url=f"https://t.me/share/url?url=Hello%20%F0%9F%91%8B%0A%0AI%20JUST%20FOUND%20%F0%9F%A5%B3%0AAn%20OUSOME%20MOVIE%20/%20SERIES%20Provide%20bot%0A%0AClick%20to%20know%0A%40{temp.U_NAME}%0A/Start%20on%20this%20bot"),
-            ],[
-            InlineKeyboardButton("OTHER", url=f"https://www.google.com/search?q=translate&oq=tra&gs_lcrp=")
-        ]]
-        reply_markup = InlineKeyboardMarkup(buttons)
-        await message.reply_photo(
-            photo="https://graph.org/file/e4b64f05f0ad6959b8603.jpg",
-            caption=script.EARNHI_TXT,
-            reply_markup=reply_markup,
-            parse_mode=enums.ParseMode.HTML
-        )
-        return
-    data = message.command[1]
-    try:
-        pre, file_id = data.split('_', 1)
-    except:
-        file_id = data
-        pre = ""
-    if len(message.command) == 2 and message.command[1] in ["earngu"]:
-        buttons = [[
-            InlineKeyboardButton("SIGN UP", url=f"https://mdiskshortner.link/ref/FreyaAllan"),
-            ],[
-            InlineKeyboardButton("DEV API", url=f"https://mdiskshortner.link/member/tools/api"),
-            ],[
-            InlineKeyboardButton("ADD GROUP", url=f"https://t.me/{temp.U_NAME}?startgroup=true"),
-            ],[
-            InlineKeyboardButton("HINDI", url=f"https://t.me/{temp.U_NAME}?start=earnhi"),
-            ],[
-            InlineKeyboardButton("ENGLISH", url=f"https://t.me/{temp.U_NAME}?start=earnen")
-            ],[
-            InlineKeyboardButton("SHARE THIS BOT", url=f"https://t.me/share/url?url=Hello%20%F0%9F%91%8B%0A%0AI%20JUST%20FOUND%20%F0%9F%A5%B3%0AAn%20OUSOME%20MOVIE%20/%20SERIES%20Provide%20bot%0A%0AClick%20to%20know%0A%40{temp.U_NAME}%0A/Start%20on%20this%20bot"),
-            ],[
-            InlineKeyboardButton("OTHER", url=f"https://www.google.com/search?q=translate&oq=tra&gs_lcrp=")
-        ]]
-        reply_markup = InlineKeyboardMarkup(buttons)
-        await message.reply_photo(
-            photo="https://graph.org/file/e4b64f05f0ad6959b8603.jpg",
-            caption=script.EARNGU_TXT,
-            reply_markup=reply_markup,
-            parse_mode=enums.ParseMode.HTML
-        )
-        return
-    data = message.command[1]
-    try:
-        pre, file_id = data.split('_', 1)
-    except:
-        file_id = data
-        pre = ""
-    if len(message.command) == 2 and message.command[1] in ["fsubhi"]:
-        buttons = [[
-            InlineKeyboardButton("ADD GROUP", url=f"https://t.me/{temp.U_NAME}?startgroup=true"),
-            ],[
-            InlineKeyboardButton("ENGLISH", url=f"https://t.me/{temp.U_NAME}?start=fsuben"),
-            ],[
-            InlineKeyboardButton("GUJARATI", url=f"https://t.me/{temp.U_NAME}?start=fsubgu")
-            ],[
-            InlineKeyboardButton("SHARE THIS BOT", url=f"https://t.me/share/url?url=Hello%20%F0%9F%91%8B%0A%0AI%20JUST%20FOUND%20%F0%9F%A5%B3%0AAn%20OUSOME%20MOVIE%20/%20SERIES%20Provide%20bot%0A%0AClick%20to%20know%0A%40{temp.U_NAME}%0A/Start%20on%20this%20bot"),
-            ],[
-            InlineKeyboardButton("OTHER", url=f"https://www.google.com/search?q=translate&oq=tra&gs_lcrp=")
-        ]]
-        reply_markup = InlineKeyboardMarkup(buttons)
-        await message.reply_photo(
-            photo="https://graph.org/file/7542abf8548535e681673.jpg",
-            caption=script.SETFSUBHI_TXT,
-            reply_markup=reply_markup,
-            parse_mode=enums.ParseMode.HTML
-        )
-        return
-    data = message.command[1]
-    try:
-        pre, file_id = data.split('_', 1)
-    except:
-        file_id = data
-        pre = ""
-    if len(message.command) == 2 and message.command[1] in ["fsubgu"]:
-        buttons = [[
-            InlineKeyboardButton("ADD GROUP", url=f"https://t.me/{temp.U_NAME}?startgroup=true"),
-            ],[
-            InlineKeyboardButton("HINDI", url=f"https://t.me/{temp.U_NAME}?start=fsubhi"),
-            ],[
-            InlineKeyboardButton("ENGLISH", url=f"https://t.me/{temp.U_NAME}?start=fsuben")
-            ],[
-            InlineKeyboardButton("SHARE THIS BOT", url=f"https://t.me/share/url?url=Hello%20%F0%9F%91%8B%0A%0AI%20JUST%20FOUND%20%F0%9F%A5%B3%0AAn%20OUSOME%20MOVIE%20/%20SERIES%20Provide%20bot%0A%0AClick%20to%20know%0A%40{temp.U_NAME}%0A/Start%20on%20this%20bot"),
-            ],[
-            InlineKeyboardButton("OTHER", url=f"https://www.google.com/search?q=translate&oq=tra&gs_lcrp=")
-        ]]
-        reply_markup = InlineKeyboardMarkup(buttons)
-        await message.reply_photo(
-            photo="https://graph.org/file/7542abf8548535e681673.jpg",
-            caption=script.SETFSUBGU_TXT,
-            reply_markup=reply_markup,
-            parse_mode=enums.ParseMode.HTML
-        )
-        return
-    data = message.command[1]
-    try:
-        pre, file_id = data.split('_', 1)
-    except:
-        file_id = data
-        pre = ""
-    if len(message.command) == 2 and message.command[1] in ["fsuben"]:
-        buttons = [[
-            InlineKeyboardButton("ADD GROUP", url=f"https://t.me/{temp.U_NAME}?startgroup=true"),
-            ],[
-            InlineKeyboardButton("HINDI", url=f"https://t.me/{temp.U_NAME}?start=fsubhi"),
-            ],[
-            InlineKeyboardButton("GUJARATI", url=f"https://t.me/{temp.U_NAME}?start=fsubgu")
-            ],[
-            InlineKeyboardButton("SHARE THIS BOT", url=f"https://t.me/share/url?url=Hello%20%F0%9F%91%8B%0A%0AI%20JUST%20FOUND%20%F0%9F%A5%B3%0AAn%20OUSOME%20MOVIE%20/%20SERIES%20Provide%20bot%0A%0AClick%20to%20know%0A%40{temp.U_NAME}%0A/Start%20on%20this%20bot"),
-            ],[
-            InlineKeyboardButton("OTHER", url=f"https://www.google.com/search?q=translate&oq=tra&gs_lcrp=")
-        ]]
-        reply_markup = InlineKeyboardMarkup(buttons)
-        await message.reply_photo(
-            photo="https://graph.org/file/7542abf8548535e681673.jpg",
-            caption=script.SETFSUB_TXT,
-            reply_markup=reply_markup,
-            parse_mode=enums.ParseMode.HTML
-        )
-        return
-    data = message.command[1]
-    try:
-        pre, file_id = data.split('_', 1)
-    except:
-        file_id = data
-        pre = ""
-    if len(message.command) == 2 and message.command[1] in ["more"]:
-        buttons = [[
-            InlineKeyboardButton("SHARE THIS BOT", url=f"https://t.me/share/url?url=Hello%20%F0%9F%91%8B%0A%0AI%20JUST%20FOUND%20%F0%9F%A5%B3%0AAn%20OUSOME%20MOVIE%20/%20SERIES%20Provide%20bot%0A%0AClick%20to%20know%0A%40{temp.U_NAME}%0A/Start%20on%20this%20bot"),
-            ],[
-            InlineKeyboardButton("OTHER", url=f"https://www.google.com/search?q=translate&oq=tra&gs_lcrp=")
-        ]]
-        reply_markup = InlineKeyboardMarkup(buttons)
-        await message.reply_photo(
-            photo="https://graph.org/file/a07e9cd51408c8ec2c684.jpg",
-            caption=script.TUTORIAL_TXT,
-            reply_markup=reply_markup,
-            parse_mode=enums.ParseMode.HTML
-        )
-        return
-    data = message.command[1]
-    try:
-        pre, file_id = data.split('_', 1)
-    except:
-        file_id = data
-        pre = ""
-    if len(message.command) == 2 and message.command[1] in ["prime_plans"]:
-        buttons = [[
-            InlineKeyboardButton("SHARE THIS BOT", url=f"https://t.me/share/url?url=Hello%20%F0%9F%91%8B%0A%0AI%20JUST%20FOUND%20%F0%9F%A5%B3%0AAn%20OUSOME%20MOVIE%20/%20SERIES%20Provide%20bot%0A%0AClick%20to%20know%0A%40{temp.U_NAME}%0A/Start%20on%20this%20bot"),
-            ],[
-            InlineKeyboardButton("OTHER", url=f"https://www.google.com/search?q=translate&oq=tra&gs_lcrp=")
-        ]]
-        reply_markup = InlineKeyboardMarkup(buttons)
-        await message.reply_photo(
-            photo=random.choice(PICS),
-            caption=script.PRIME_PLANS,
             reply_markup=reply_markup,
             parse_mode=enums.ParseMode.HTML
         )
@@ -403,10 +153,12 @@ async def start(client, message):
                     reply_markup=InlineKeyboardMarkup(
                         [
                          [
-                          InlineKeyboardButton('Sᴜᴘᴘᴏʀᴛ Gʀᴏᴜᴘ', url=SUPPORT_CHAT),
+                          InlineKeyboardButton('Sᴜᴘᴘᴏʀᴛ Gʀᴏᴜᴘ', url=f'https://t.me/{SUPPORT_CHAT}'),
                           InlineKeyboardButton('Uᴘᴅᴀᴛᴇs Cʜᴀɴɴᴇʟ', url=CHNL_LNK)
                        ],[
-                          InlineKeyboardButton("Mᴏᴠɪᴇ Rᴇᴏ̨ᴜᴇsᴛ Gʀᴏᴜᴘ", url=GRP_LNK)
+                          InlineKeyboardButton('▶ Gen Stream / Download Link', callback_data=f'generate_stream_link:{file_id}')
+                       ],[
+                          InlineKeyboardButton("Mᴏᴠɪᴇ Rᴇᴏ̨ᴜᴇsᴛ Gʀᴏᴜᴘ", url="t.me/TeamHMT_Movies")
                          ]
                         ]
                     )
@@ -422,10 +174,12 @@ async def start(client, message):
                     reply_markup=InlineKeyboardMarkup(
                         [
                          [
-                          InlineKeyboardButton('Sᴜᴘᴘᴏʀᴛ Gʀᴏᴜᴘ', url=SUPPORT_CHAT),
+                          InlineKeyboardButton('Sᴜᴘᴘᴏʀᴛ Gʀᴏᴜᴘ', url=f'https://t.me/{SUPPORT_CHAT}'),
                           InlineKeyboardButton('Uᴘᴅᴀᴛᴇs Cʜᴀɴɴᴇʟ', url=CHNL_LNK)
                        ],[
-                          InlineKeyboardButton("Mᴏᴠɪᴇ Rᴇᴏ̨ᴜᴇsᴛ Gʀᴏᴜᴘ", url=GRP_LNK)
+                          InlineKeyboardButton('▶ Gen Stream / Download Link', callback_data=f'generate_stream_link:{file_id}')
+                       ],[
+                          InlineKeyboardButton("Mᴏᴠɪᴇ Rᴇᴏ̨ᴜᴇsᴛ Gʀᴏᴜᴘ", url="t.me/TeamHMT_Movies")
                          ]
                         ]
                     )
@@ -579,10 +333,12 @@ async def start(client, message):
                 reply_markup=InlineKeyboardMarkup(
                     [
                      [
-                      InlineKeyboardButton('Sᴜᴘᴘᴏʀᴛ Gʀᴏᴜᴘ', url=SUPPORT_CHAT),
+                      InlineKeyboardButton('Sᴜᴘᴘᴏʀᴛ Gʀᴏᴜᴘ', url=f'https://t.me/{SUPPORT_CHAT}'),
                       InlineKeyboardButton('Uᴘᴅᴀᴛᴇs Cʜᴀɴɴᴇʟ', url=CHNL_LNK)
                    ],[
-                      InlineKeyboardButton("Mᴏᴠɪᴇ Rᴇᴏ̨ᴜᴇsᴛ Gʀᴏᴜᴘ", url=GRP_LNK)
+                      InlineKeyboardButton('▶ Gen Stream / Download Link', callback_data=f'generate_stream_link:{file_id}')
+                   ],[
+                      InlineKeyboardButton("Mᴏᴠɪᴇ Rᴇᴏ̨ᴜᴇsᴛ Gʀᴏᴜᴘ", url="t.me/TeamHMT_Movies")
                      ]
                     ]
                 )
@@ -602,7 +358,7 @@ async def start(client, message):
         else:
             chat_id = temp.SHORT.get(user)
         settings = await get_settings(chat_id)
-        if settings['is_shortlink'] and user not in temp.PRIME_USERS:
+        if settings['is_shortlink'] and user not in PREMIUM_USER:
             files_ = await get_file_details(file_id)
             files = files_[0]
             g = await get_shortlink(chat_id, f"https://telegram.me/{temp.U_NAME}?start=file_{file_id}")
@@ -641,17 +397,19 @@ async def start(client, message):
                 reply_markup=InlineKeyboardMarkup(
                     [
                      [
-                      InlineKeyboardButton('Sᴜᴘᴘᴏʀᴛ Gʀᴏᴜᴘ', url=SUPPORT_CHAT),
+                      InlineKeyboardButton('Sᴜᴘᴘᴏʀᴛ Gʀᴏᴜᴘ', url=f'https://t.me/{SUPPORT_CHAT}'),
                       InlineKeyboardButton('Uᴘᴅᴀᴛᴇs Cʜᴀɴɴᴇʟ', url=CHNL_LNK)
                    ],[
-                      InlineKeyboardButton("Mᴏᴠɪᴇ Rᴇᴏ̨ᴜᴇsᴛ Gʀᴏᴜᴘ", url=GRP_LNK)
+                      InlineKeyboardButton('▶ Gen Stream / Download Link', callback_data=f'generate_stream_link:{file_id}')
+                   ],[
+                      InlineKeyboardButton("Mᴏᴠɪᴇ Rᴇᴏ̨ᴜᴇsᴛ Gʀᴏᴜᴘ", url="t.me/TeamHMT_Movies")
                      ]
                     ]
                 )
             )
             filetype = msg.media
             file = getattr(msg, filetype.value)
-            title = 'Freya Allan ' + ' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@'), file.file_name.split()))
+            title = '@TeamHMT ' + ' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@'), file.file_name.split()))
             size=get_size(file.file_size)
             f_caption = f"<code>{title}</code>"
             if CUSTOM_FILE_CAPTION:
@@ -672,7 +430,7 @@ async def start(client, message):
             pass
         return await message.reply('No such file exist.')
     files = files_[0]
-    title = 'Freya Allan ' + ' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@'), files.file_name.split()))
+    title = '@TeamHMT ' + ' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@'), files.file_name.split()))
     size=get_size(files.file_size)
     f_caption=files.caption
     if CUSTOM_FILE_CAPTION:
@@ -682,7 +440,7 @@ async def start(client, message):
             logger.exception(e)
             f_caption=f_caption
     if f_caption is None:
-        f_caption = f"Freya Allan {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@'), files.file_name.split()))}"
+        f_caption = f"@TeamHMT {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@'), files.file_name.split()))}"
     if not await check_verification(client, message.from_user.id) and VERIFY == True:
         btn = [[
             InlineKeyboardButton("Verify", url=await get_token(client, message.from_user.id, f"https://telegram.me/{temp.U_NAME}?start="))
@@ -701,10 +459,12 @@ async def start(client, message):
         reply_markup=InlineKeyboardMarkup(
             [
              [
-              InlineKeyboardButton('Sᴜᴘᴘᴏʀᴛ Gʀᴏᴜᴘ', url=SUPPORT_CHAT),
+              InlineKeyboardButton('Sᴜᴘᴘᴏʀᴛ Gʀᴏᴜᴘ', url=f'https://t.me/{SUPPORT_CHAT}'),
               InlineKeyboardButton('Uᴘᴅᴀᴛᴇs Cʜᴀɴɴᴇʟ', url=CHNL_LNK)
            ],[
-              InlineKeyboardButton("Mᴏᴠɪᴇ Rᴇᴏ̨ᴜᴇsᴛ Gʀᴏᴜᴘ", url=GRP_LNK)
+              InlineKeyboardButton('▶ Gen Stream / Download Link', callback_data=f'generate_stream_link:{file_id}')
+           ],[
+              InlineKeyboardButton("Mᴏᴠɪᴇ Rᴇᴏ̨ᴜᴇsᴛ Gʀᴏᴜᴘ", url="t.me/TeamHMT_Movies")
              ]
             ]
         )
@@ -1150,7 +910,7 @@ async def shortlink(bot, message):
         return await message.reply(f"You are anonymous admin. Turn off anonymous admin and try again this command")
     chat_type = message.chat.type
     if chat_type == enums.ChatType.PRIVATE:
-        return await message.reply_text(f"<b>Hey {message.from_user.mention},  This command only works on groups !</b>", reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("DIDN'T UNDERSTAND", url=f"https://t.me/{temp.U_NAME}?start=earnen")]]))
+        return await message.reply_text(f"<b>Hey {message.from_user.mention}, This command only works on groups !\n\n<u>Follow These Steps to Connect Shortener:</u>\n\n1. Add Me in Your Group with Full Admin Rights\n\n2. After Adding in Grp, Set your Shortener\n\nSend this command in your group\n\n—> /shortlink ""{your_shortener_website_name} {your_shortener_api}\n\n#Sample:-\n/shortlink mplaylink.com 1f1da5c9df9a58058672ac8d8134e203b03426a1\n\nThat's it!!! Enjoy Earning Money 💲\n\n[[[ Trusted Earning Site - https://bit.ly/mplaylink ]]]\n\nIf you have any Doubts, Feel Free to Ask me - @TeamHMT_Bot\n\n(Puriyala na intha bot la message pannunga - @TeamHMT_bot)</b>")
     elif chat_type in [enums.ChatType.GROUP, enums.ChatType.SUPERGROUP]:
         grpid = message.chat.id
         title = message.chat.title
@@ -1160,13 +920,13 @@ async def shortlink(bot, message):
     userid = message.from_user.id
     user = await bot.get_chat_member(grpid, userid)
     if user.status != enums.ChatMemberStatus.ADMINISTRATOR and user.status != enums.ChatMemberStatus.OWNER and str(userid) not in ADMINS:
-        return await message.reply_text("<b>You don't have access to use this command!\n\nAdd Me to Your Own Group as Admin and Try This Command\n\n click below 👇 to know more!</b>", reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("DIDN'T UNDERSTAND", url=f"https://t.me/{temp.U_NAME}?start=earnen")]]))
+        return await message.reply_text("<b>You don't have access to use this command!\n\nAdd Me to Your Own Group as Admin and Try This Command\n\nFor More PM Me With This Command</b>")
     else:
         pass
     try:
         command, shortlink_url, api = data.split(" ")
     except:
-        return await message.reply_text("<b>Command Incomplete :(\n\nGive me a shortener website link and api along with the command !\n\nclick below 👇 to know more </b>", reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("DIDN'T UNDERSTAND", url=f"https://t.me/{temp.U_NAME}?start=earnen")]]))
+        return await message.reply_text("<b>Command Incomplete :(\n\nGive me a shortener website link and api along with the command !\n\nFormat: <code>/shortlink mplaylink.com 1f1da5c9df9a58058672ac8d8134e203b03426a1</code></b>")
     reply = await message.reply_text("<b>Please Wait...</b>")
     shortlink_url = re.sub(r"https?://?", "", shortlink_url)
     shortlink_url = re.sub(r"[:/]", "", shortlink_url)
@@ -1186,7 +946,7 @@ async def offshortlink(bot, message):
     else:
         return
     await save_group_settings(grpid, 'is_shortlink', False)
-    ENABLE_SHORTLINK = False
+    # ENABLE_SHORTLINK = False
     return await message.reply_text("Successfully disabled shortlink")
     
 @Client.on_message(filters.command("setshortlinkon") & filters.user(ADMINS))
@@ -1255,7 +1015,7 @@ async def settutorial(bot, message):
         return await message.reply(f"You are anonymous admin. Turn off anonymous admin and try again this command")
     chat_type = message.chat.type
     if chat_type == enums.ChatType.PRIVATE:
-        return await message.reply_text("This Command Work Only in group\n\nTry it in your own group", reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("DIDN'T UNDERSTAND", url=f"https://t.me/{temp.U_NAME}?start=more")]]))
+        return await message.reply_text("This Command Work Only in group\n\nTry it in your own group")
     elif chat_type in [enums.ChatType.GROUP, enums.ChatType.SUPERGROUP]:
         grpid = message.chat.id
         title = message.chat.title
@@ -1268,7 +1028,7 @@ async def settutorial(bot, message):
     else:
         pass
     if len(message.command) == 1:
-        return await message.reply("<b>Give me a tutorial link along with this command\n\nCommand Usage: /set_tutorial your tutorial link</b>", reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("DIDN'T UNDERSTAND", url=f"https://t.me/{temp.U_NAME}?start=more")]]))
+        return await message.reply("<b>Give me a tutorial link along with this command\n\nCommand Usage: /set_tutorial your tutorial link</b>")
     elif len(message.command) == 2:
         reply = await message.reply_text("<b>Please Wait...</b>")
         tutorial = message.command[1]
@@ -1276,7 +1036,7 @@ async def settutorial(bot, message):
         await save_group_settings(grpid, 'is_tutorial', True)
         await reply.edit_text(f"<b>Successfully Added Tutorial\n\nHere is your tutorial link for your group {title} - <code>{tutorial}</code></b>")
     else:
-        return await message.reply("<b>You entered Incorrect Format\n\nFormat: /set_tutorial your tutorial link</b>", reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("DIDN'T UNDERSTAND", url=f"https://t.me/{temp.U_NAME}?start=more")]]))
+        return await message.reply("<b>You entered Incorrect Format\n\nFormat: /set_tutorial your tutorial link</b>")
 
 @Client.on_message(filters.command("remove_tutorial"))
 async def removetutorial(bot, message):
@@ -1307,53 +1067,3 @@ async def stop_button(bot, message):
     await asyncio.sleep(3)
     await msg.edit("**✅️ 𝙱𝙾𝚃 𝙸𝚂 𝚁𝙴𝚂𝚃𝙰𝚁𝚃𝙴𝙳. 𝙽𝙾𝚆 𝚈𝙾𝚄 𝙲𝙰𝙽 𝚄𝚂𝙴 𝙼𝙴**")
     os.execl(sys.executable, sys.executable, *sys.argv)
-
-
-@Client.on_message(filters.command("fsub"))
-async def fsub_channel(bot, message):
-    chat_type = message.chat.type
-    if chat_type == enums.ChatType.PRIVATE:
-        return await message.reply_text(f"<b>Hey {message.from_user.mention}, This command only works on groups !</b>", reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("DIDN'T UNDERSTAND", url=f"https://t.me/{temp.U_NAME}?start=fsuben")]]))
-    elif chat_type in [enums.ChatType.GROUP, enums.ChatType.SUPERGROUP]:
-        grpid = message.chat.id
-        title = message.chat.title
-    else:
-        return
-    data = message.text
-    userid = message.from_user.id
-    user = await bot.get_chat_member(grpid, userid)
-    if user.status != enums.ChatMemberStatus.ADMINISTRATOR and user.status != enums.ChatMemberStatus.OWNER and str(userid) not in ADMINS:
-        return await message.reply_text("<b>You don't have access to use this command !</b>")
-    else:
-        pass
-    try:
-        command, fsub = data.split(" ")
-    except:
-        return await message.reply_text("<b>Command Incomplete :(\n\nGive me a fsub id along with the command !\n\nFormat: <code>/fsub -100686867767</code></b>", reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("DIDN'T UNDERSTAND", url=f"https://t.me/{temp.U_NAME}?start=fsuben")]]))
-    reply = await message.reply_text("<b>Please Wait...</b>")
-    await save_group_settings(grpid, 'fsub', fsub)
-    await reply.edit_text(f"<b>Successfully added force subscribe for {title}.\n\nCurrent f sub id: \nCurrent FSUB: <code>{fsub}</code></b>")
-
-
-@Client.on_message(filters.command("rmfsub"))
-async def rmfsub_channel(bot, message):
-    chat_type = message.chat.type
-    if chat_type == enums.ChatType.PRIVATE:
-        return await message.reply_text(f"<b>Hey {message.from_user.mention}, This command only works on groups !</b>", reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("DIDN'T UNDERSTAND", url=f"https://t.me/{temp.U_NAME}?start=fsuben")]]))
-    elif chat_type in [enums.ChatType.GROUP, enums.ChatType.SUPERGROUP]:
-        grpid = message.chat.id
-        title = message.chat.title
-    else:
-        return
-    data = message.text
-    userid = message.from_user.id
-    user = await bot.get_chat_member(grpid, userid)
-    if user.status != enums.ChatMemberStatus.ADMINISTRATOR and user.status != enums.ChatMemberStatus.OWNER and str(userid) not in ADMINS:
-        return await message.reply_text("<b>You don't have access to use this command !</b>")
-    else:
-        pass
-    fsub = AUTH_CHANNEL
-    reply = await message.reply_text("<b>Please Wait...</b>")
-    await save_group_settings(grpid, 'fsub', fsub)
-    await reply.edit_text(f"<b>Successfully added force subscribe for {title}.\n\nCurrent f sub id: \nCurrent FSUB: <code>{fsub}</code></b>")
-
