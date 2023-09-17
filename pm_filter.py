@@ -31,6 +31,7 @@ from database.gfilters_mdb import (
     del_allg
 )
 import logging
+from plugins.clone import clonedme
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.ERROR)
