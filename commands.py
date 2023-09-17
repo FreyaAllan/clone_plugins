@@ -15,7 +15,7 @@ from plugins.pm_filter import ENABLE_SHORTLINK
 import re, asyncio, os, sys
 import json
 import base64
-from plugins.Mods.clone import clonedme
+from plugins.clone import clonedme
 logger = logging.getLogger(__name__)
 
 BATCH_FILES = {}
