@@ -44,45 +44,6 @@ BUTTONS2 = {}
 SPELL_CHECK = {}
 ENABLE_SHORTLINK = ""
 
-async def is_fsubs(bot, query, userid=None):
-    grp_id = query.chat.id
-    settings = await get_settings(grp_id)
-    ACHANNEL = settings['fsub'] if settings['fsub'] else AUTH_CHANNEL
-    try:
-        if userid == None and query != None:
-            user = await bot.get_chat_member(ACHANNEL, query.from_user.id)
-        else:
-            user = await bot.get_chat_member(ACHANNEL, int(userid))
-    except UserNotParticipant:
-        pass
-    except Exception as e:
-        logger.exception(e)
-    else:
-        if user.status != enums.ChatMemberStatus.BANNED:
-            return True
-
-    return False
-
-async def is_refsubs(bot, query, userid=None):
-    grp_id = query.message.chat.id
-    settings = await get_settings(grp_id)
-    ACHANNEL = settings['fsub'] if settings['fsub'] else AUTH_CHANNEL
-    try:
-        if userid == None and query != None:
-            user = await bot.get_chat_member(ACHANNEL, query.from_user.id)
-        else:
-            user = await bot.get_chat_member(ACHANNEL, int(userid))
-    except UserNotParticipant:
-        pass
-    except Exception as e:
-        logger.exception(e)
-    else:
-        if user.status != enums.ChatMemberStatus.BANNED:
-            return True
-
-    return False
-
-
 @Client.on_message(filters.group & filters.text & filters.incoming)
 async def give_filter(client, message):
     if message.chat.id != SUPPORT_CHAT_ID:
