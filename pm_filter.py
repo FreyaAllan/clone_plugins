@@ -85,34 +85,7 @@ async def is_refsubs(bot, query, userid=None):
 
 @Client.on_message(filters.group & filters.text & filters.incoming)
 async def give_filter(client, message):
-    grp_id = message.chat.id
-    settings = await get_settings(grp_id)
-    ACHANNEL = settings['fsub'] if settings['fsub'] else AUTH_CHANNEL
-    if ACHANNEL and not await is_fsubs(client, message):
-        try:
-            invite_link = await client.create_chat_invite_link(int(ACHANNEL))
-        except ChatAdminRequired:
-            logger.error("Make sure Bot is admin in Forcesub channel")
-            return
-        buttons = [[
-            InlineKeyboardButton("📢 CHANNEL 📢", url=invite_link.invite_link)
-        ],[
-            InlineKeyboardButton("🔊 UNMUTE ME 🔊", callback_data="jenna_checksub")
-        ]]
-        reply_markup = InlineKeyboardMarkup(buttons)
-        try:
-            await client.restrict_chat_member(message.chat.id, message.from_user.id, ChatPermissions(), datetime.now() + timedelta(minutes=5))
-        except:
-            pass
-        jenna = await message.reply_photo(
-                photo=random.choice(PICS),
-                caption=f"👋 Hello {message.from_user.mention},\n\nPlease join my 'Updates Channel' and request again. 😇",
-                reply_markup=reply_markup,
-                parse_mode=enums.ParseMode.HTML
-        )
-        await asyncio.sleep(300)
-        await jenna.delete()
-    elif message.chat.id != SUPPORT_CHAT_ID:
+    if message.chat.id != SUPPORT_CHAT_ID:
         glob = await global_filters(client, message)
         if glob == False:
             manual = await manual_filters(client, message)
