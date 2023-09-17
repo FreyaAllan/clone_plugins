@@ -17,6 +17,7 @@ import json
 import base64
 from plugins.clone import clonedme
 logger = logging.getLogger(__name__)
+from bot import app
 
 BATCH_FILES = {}
 
@@ -817,7 +818,7 @@ async def save_template(client, message):
     await sts.edit(f"Successfully changed template for {title} to\n\n{template}")
 
 
-@Client.on_message((filters.command(["request", "Req"]) | filters.regex("#request") | filters.regex("#Request")))
+@app.on_message((filters.command(["request", "Req"]) | filters.regex("#request") | filters.regex("#Request")))
 async def handle_requests(bot, message):
     chat_id = message.chat.id
     reporter = str(message.from_user.id)
