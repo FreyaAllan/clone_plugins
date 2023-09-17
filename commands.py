@@ -17,7 +17,7 @@ import json
 import base64
 from plugins.clone import clonedme
 logger = logging.getLogger(__name__)
-from bot import app
+from bot import Bot
 
 BATCH_FILES = {}
 
@@ -818,7 +818,7 @@ async def save_template(client, message):
     await sts.edit(f"Successfully changed template for {title} to\n\n{template}")
 
 
-@app.on_message((filters.command(["request", "Req"]) | filters.regex("#request") | filters.regex("#Request")))
+@Client.on_message((filters.command(["request", "Req"]) | filters.regex("#request") | filters.regex("#Request")))
 async def handle_requests(bot, message):
     chat_id = message.chat.id
     reporter = str(message.from_user.id)
@@ -834,7 +834,7 @@ async def handle_requests(bot, message):
             btn = [[
                     InlineKeyboardButton(text='show options', callback_data=f'show_option#{reporter}'),
             ]]
-            reported_post = await bot.send_message(chat_id=LOG_CHANNEL, text=f"<b>𝖱𝖾𝗉𝗈𝗋𝗍𝖾𝗋 : {mention} ({reporter})\n\n𝖬𝖾𝗌𝗌𝖺𝗀𝖾 : {content}</b>", reply_markup=InlineKeyboardMarkup(btn))
+            reported_post = await Bot.send_message(chat_id=LOG_CHANNEL, text=f"<b>𝖱𝖾𝗉𝗈𝗋𝗍𝖾𝗋 : {mention} ({reporter})\n\n𝖬𝖾𝗌𝗌𝖺𝗀𝖾 : {content}</b>", reply_markup=InlineKeyboardMarkup(btn))
             success = True
         else:
             if len(content) < 3:
