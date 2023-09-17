@@ -11,7 +11,6 @@ import asyncio, random
 from info import *
 
 """-----------------------------------------https://t.me/GetTGLink/4179 --------------------------------------"""
-Config.ADMINS.append(ADMINS)
 
 @Client.on_message(filters.new_chat_members & filters.group)
 async def save_group(bot, message):
