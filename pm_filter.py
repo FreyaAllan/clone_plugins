@@ -43,7 +43,6 @@ BUTTONS1 = {}
 BUTTONS2 = {}
 SPELL_CHECK = {}
 ENABLE_SHORTLINK = ""
-Config.ADMINS.append(ADMINS)
 
 async def is_fsubs(bot, query, userid=None):
     grp_id = query.chat.id
