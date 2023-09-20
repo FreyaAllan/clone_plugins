@@ -150,17 +150,17 @@ class Database:
     
     async def get_settings(self, id):
         default = {
-            'button': SINGLE_BUTTON,
-            'botpm': P_TTI_SHOW_OFF,
-            'file_secure': PROTECT_CONTENT,
-            'imdb': IMDB,
-            'spell_check': SPELL_CHECK_REPLY,
-            'welcome': MELCOW_NEW_USERS,
-            'auto_delete': AUTO_DELETE,
-            'template': IMDB_TEMPLATE,
-            'shortlink': SHORTLINK_URL,
-            'shortlink_api': SHORTLINK_API,
-            'is_shortlink': IS_SHORTLINK
+            'button': Config.SINGLE_BUTTON,
+            'botpm': Config.P_TTI_SHOW_OFF,
+            'file_secure': Config.PROTECT_CONTENT,
+            'imdb': Config.IMDB,
+            'spell_check': Config.SPELL_CHECK_REPLY,
+            'welcome': Config.MELCOW_NEW_USERS,
+            'auto_delete': Config.AUTO_DELETE,
+            'template': Config.IMDB_TEMPLATE,
+            'shortlink': Config.SHORTLINK_URL,
+            'shortlink_api': Config.SHORTLINK_API,
+            'is_shortlink': Config.IS_SHORTLINK
         }
         chat = await self.grp.find_one({'id':int(id)})
         if chat:
