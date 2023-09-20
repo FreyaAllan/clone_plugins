@@ -8,6 +8,7 @@ from utils import get_size, temp, get_settings
 from Script import script
 from pyrogram.errors import ChatAdminRequired
 import asyncio, random
+from clone_plugins.cloneinfo import Config
 from info import *
 
 """-----------------------------------------https://t.me/GetTGLink/4179 --------------------------------------"""
@@ -529,6 +530,22 @@ async def plist_users(bot, message):
             with open('pusers.txt', 'w+') as outfile:
                 outfile.write(out)
             await message.reply_document('pusers.txt', caption="List Of paid Users")
+    else:
+        await message.reply(f"YOU NEED TO BE BOT ADMIN To Do this")
+
+
+@Client.on_message(filters.command(["adddb"]))
+async def sudo_user(bot, message):
+    if message.from_user.id in Config.ADMINS:
+        if len(message.command) == 1:
+            return await message.reply('Give me a user id / username')
+        r = message.text.split(None)
+        if len(r) > 2:
+            chat = message.text.split(None, 2)[1]
+        else:
+            chat = message.command[1]
+            Config.DATABASE_URI.append(chat)
+            await message.reply(f"Succesfully ADDED {chat}")
     else:
         await message.reply(f"YOU NEED TO BE BOT ADMIN To Do this")
     
