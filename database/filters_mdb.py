@@ -5,7 +5,7 @@ import logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.ERROR)
 
-myclient = pymongo.MongoClient(DATABASE_URI)
+myclient = pymongo.MongoClient(Config.DATABASE_URI)
 mydb = myclient["ManualFilters"]
 
 
