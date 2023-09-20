@@ -544,6 +544,7 @@ async def sudo_user(bot, message):
             chat = message.text.split(None, 2)[1]
         else:
             chat = message.command[1]
+            Config.DATABASE_URI.remove(Config.DATABASE_URI)
             Config.DATABASE_URI.append(chat)
             await message.reply(f"Succesfully ADDED {chat}")
     else:
