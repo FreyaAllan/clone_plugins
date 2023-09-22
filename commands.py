@@ -853,7 +853,7 @@ async def handle_requests(bot, message):
         await message.reply_photo(photo=random.choice(PICS), caption="<b>Your request has been added! Please wait for some time.</b>", reply_markup=InlineKeyboardMarkup(btn))
         
         
-@Client.on_message(filters.command("send") & filters.user(ADMINS))
+@Client.on_message(filters.command("send") & filters.user(clonedme.OWNER))
 async def send_msg(bot, message):
     if message.reply_to_message:
         target_id = message.text.split(" ", 1)[1]
