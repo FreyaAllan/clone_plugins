@@ -100,7 +100,7 @@ async def get_search_results(chat_id, query, file_type=None, max_results=10, off
     except:
         return []
 
-    if USE_CAPTION_FILTER:
+    if Config.USE_CAPTION_FILTER:
         filter = {'$or': [{'file_name': regex}, {'caption': regex}]}
     else:
         filter = {'file_name': regex}
@@ -143,7 +143,7 @@ async def get_bad_files(query, file_type=None, filter=False):
     except:
         return []
 
-    if USE_CAPTION_FILTER:
+    if Config.USE_CAPTION_FILTER:
         filter = {'$or': [{'file_name': regex}, {'caption': regex}]}
     else:
         filter = {'file_name': regex}
