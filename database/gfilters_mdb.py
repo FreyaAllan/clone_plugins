@@ -14,7 +14,7 @@ mydb = myclient["GlobalFilters"]
 
 async def add_gfilter(gfilters, text, reply_text, btn, file, alert):
     mycol = mydb[str(gfilters)]
-    # mycol.create_index([('text', 'text')])
+    mycol.create_index([('text', 'text')])
 
     data = {
         'text':str(text),
@@ -34,7 +34,7 @@ async def find_gfilter(gfilters, name):
     mycol = mydb[str(gfilters)]
     
     query = mycol.find( {"text":name})
-    # query = mycol.find( { "$text": {"$search": name}})
+    query = mycol.find( { "$text": {"$search": name}})
     try:
         for file in query:
             reply_text = file['reply']
