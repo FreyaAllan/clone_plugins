@@ -12,7 +12,7 @@ mydb = myclient["ManualFilters"]
 
 async def add_filter(grp_id, text, reply_text, btn, file, alert):
     mycol = mydb[str(grp_id)]
-    # mycol.create_index([('text', 'text')])
+    mycol.create_index([('text', 'text')])
 
     data = {
         'text':str(text),
@@ -32,7 +32,7 @@ async def find_filter(group_id, name):
     mycol = mydb[str(group_id)]
     
     query = mycol.find( {"text":name})
-    # query = mycol.find( { "$text": {"$search": name}})
+    query = mycol.find( { "$text": {"$search": name}})
     try:
         for file in query:
             reply_text = file['reply']
