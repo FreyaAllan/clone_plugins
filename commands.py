@@ -471,8 +471,6 @@ async def start(client, message):
         string = decode(base64_string),
         file_unique_id= string.split("#"),
         file = await get_file_details(file_unique_id),
-        if not file:
-            return await message.reply('ꜰɪʟᴇs ɴᴏᴛ ꜰᴏᴜɴᴅ 😢')
         file_id=file['file_id'],
         caption=f_caption,
         protect_content=True if pre == 'filep' else False,
