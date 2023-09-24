@@ -273,15 +273,14 @@ async def start(client, message):
         await asyncio.sleep(300)
         await k.edit("<b>Your message is successfully deleted!!!</b>")
         return 
-        
-    elif MediaEmpty:
-        await message.reply('No such file exist. or no database added')
-           
+         
     elif data.startswith("short"):
         user = message.from_user.id
         chat_id = temp.SHORT.get(user)
         files_ = await get_file_details(file_id)
         files = files_[0]
+        if not files:
+            return await message.reply('<b><i>No such file exist.</b></i>')
         g = await get_shortlink(chat_id, f"https://telegram.me/{clonedme.U_NAME}?start=file_{file_id}")
         k = await client.send_message(chat_id=user,text=f"<b>📕Nᴀᴍᴇ ➠ : <code>{files.file_name}</code> \n\n🔗Sɪᴢᴇ ➠ : {get_size(files.file_size)}\n\n📂Fɪʟᴇ ʟɪɴᴋ ➠ : {g}\n\n<i>Note: This message is deleted in 20 mins to avoid copyrights. Save the link to Somewhere else</i></b>", reply_markup=InlineKeyboardMarkup(
                 [
@@ -306,6 +305,8 @@ async def start(client, message):
             file_id = file.file_id
             files_ = await get_file_details(file_id)
             files1 = files_[0]
+            if not files1:
+                return await message.reply('<b><i>No such file exist.</b></i>')
             title = ' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@'), files1.file_name.split()))
             size=get_size(files1.file_size)
             f_caption=files1.caption
@@ -364,6 +365,8 @@ async def start(client, message):
         if settings['is_shortlink'] and user not in PREMIUM_USER:
             files_ = await get_file_details(file_id)
             files = files_[0]
+            if not files:
+                return await message.reply('<b><i>No such file exist.</b></i>')
             g = await get_shortlink(chat_id, f"https://telegram.me/{clonedme.U_NAME}?start=file_{file_id}")
             k = await client.send_message(chat_id=message.from_user.id,text=f"<b>📕Nᴀᴍᴇ ➠ : <code>{files.file_name}</code> \n\n🔗Sɪᴢᴇ ➠ : {get_size(files.file_size)}\n\n📂Fɪʟᴇ ʟɪɴᴋ ➠ : {g}\n\n<i>Note: This message is deleted in 20 mins to avoid copyrights. Save the link to Somewhere else</i></b>", reply_markup=InlineKeyboardMarkup(
                     [
@@ -379,7 +382,7 @@ async def start(client, message):
             await k.edit("<b>Your message is successfully deleted!!!</b>")
             return
     user = message.from_user.id
-    files_ = await get_file_details(file_id)           
+    files_ = await get_file_details(file_id)  
     if not files_:
         pre, file_id = ((base64.urlsafe_b64decode(data + "=" * (-len(data) % 4))).decode("ascii")).split("_", 1)
         try:
@@ -433,6 +436,8 @@ async def start(client, message):
             pass
         return await message.reply('No such file exist. or no database added')
     files = files_[0]
+    if not files:
+        return await message.reply('<b><i>No such file exist.</b></i>')
     title = f'{clonedme.B_NAME} ' + ' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@'), files.file_name.split()))
     size=get_size(files.file_size)
     f_caption=files.caption
