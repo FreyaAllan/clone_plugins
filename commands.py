@@ -360,8 +360,8 @@ async def start(client, message):
         string = decode(base64_string)
         file_unique_id= string.split("#")
         file = await get_file_details(file_unique_id)
-            if not file:
-                return await message.reply('ꜰɪʟᴇs ɴᴏᴛ ꜰᴏᴜɴᴅ 😢')
+        if not file:
+            return await message.reply('ꜰɪʟᴇs ɴᴏᴛ ꜰᴏᴜɴᴅ 😢')
         user = message.from_user.id
         if temp.SHORT.get(user)==None:
             await message.reply_text(text="<b>Please Search Again in Group</b>")
