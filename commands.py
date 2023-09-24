@@ -356,6 +356,12 @@ async def start(client, message):
         
         
     elif data.startswith("files"):
+        _, base64_string = int("_" + file_id.split("_")[1])
+        string = decode(base64_string)
+        file_unique_id= string.split("#")
+        file = await get_file_details(file_unique_id)
+            if not file:
+                return await message.reply('ꜰɪʟᴇs ɴᴏᴛ ꜰᴏᴜɴᴅ 😢')
         user = message.from_user.id
         if temp.SHORT.get(user)==None:
             await message.reply_text(text="<b>Please Search Again in Group</b>")
@@ -398,7 +404,7 @@ async def start(client, message):
                 return
             msg = await client.send_cached_media(
                 chat_id=message.from_user.id,
-                file_id=file_id,
+                file_id=file['file_id'],
                 protect_content=True if pre == 'filep' else False,
                 reply_markup=InlineKeyboardMarkup(
                     [
