@@ -14,7 +14,7 @@ from plugins.clone import clonedme
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
-DATABASE_URI = clonedme.DATABASE_URI if clonedme.DATABASE_URI else Config.DATABASE_URI
+DATABASE_URI = clonedme.DATABASE_URI
 
 client = AsyncIOMotorClient(DATABASE_URI)
 db = client[Config.DATABASE_NAME]
