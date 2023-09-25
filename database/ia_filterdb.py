@@ -9,12 +9,14 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from marshmallow.exceptions import ValidationError
 from clone_plugins.cloneinfo import Config
 from utils import get_settings, save_group_settings
+from plugins.clone import clonedme
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
+DATABASE_URI = clonedme.DATABASE_URI if clonedme.DATABASE_URI else Config.DATABASE_URI
 
-client = AsyncIOMotorClient(Config.DATABASE_URI)
+client = AsyncIOMotorClient(DATABASE_URI)
 db = client[Config.DATABASE_NAME]
 instance = Instance.from_db(db)
 
