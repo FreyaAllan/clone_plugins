@@ -1,7 +1,7 @@
 import re
 from os import environ
 from Script import script 
-from plugins.clone import clonedme
+from info import *
 
 id_pattern = re.compile(r'^.\d+$')
 def is_enabled(value, default):
@@ -39,7 +39,7 @@ class Config:
     NO_RESULTS_MSG = bool(environ.get("NO_RESULTS_MSG", False))
 
 # MongoDB information
-    DATABASE_URI = clonedme.DATABASE_URI
+    DATABASE_URI = DATABASE_URI
     DATABASE_NAME = environ.get('DATABASE_NAME', "")
     COLLECTION_NAME = environ.get('COLLECTION_NAME', 'Telegram_files')
 
