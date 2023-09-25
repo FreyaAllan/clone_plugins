@@ -536,7 +536,7 @@ async def plist_users(bot, message):
 
 @Client.on_message(filters.command(["adddb"]))
 #@Client.on_message(filters.command("DATABASE_URI") & filters.private)
-async def set_database_uri(client, message):
+async def set_database_url(client, message):
     try:
         user_id = message.from_user.id
         if user_id not in Config.ADMINS:
