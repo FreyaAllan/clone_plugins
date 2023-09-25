@@ -465,10 +465,6 @@ async def start(client, message):
             reply_markup=InlineKeyboardMarkup(btn)
         )
         return
-    _, base64_string = int("_" + file_id.split("_")[1]),
-    string = decode(base64_string)
-    file_unique_id= string.split("#")
-    file = await get_file_details(file_unique_id)         
     msg = await client.send_cached_media(
         chat_id=message.from_user.id,
         file_id=file['file_id'],
