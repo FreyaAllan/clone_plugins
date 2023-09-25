@@ -467,7 +467,6 @@ async def start(client, message):
         return
     msg = await client.send_cached_media(
         chat_id=message.from_user.id,
-        _, base64_string = int("_" + file_id.split("_")[1]),
         string = decode(base64_string),
         file_unique_id= string.split("#"),
         file = await get_file_details(file_unique_id),
@@ -475,7 +474,7 @@ async def start(client, message):
         caption=f_caption,
         protect_content=True if pre == 'filep' else False,
         reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton('▶ Gen Stream / Download Link', callback_data=f'generate_stream_link:{file_id}')]])
-    
+    )
     btn = [[
         InlineKeyboardButton("Get File Again", callback_data=f'delfile#{file_id}')
     ]]
