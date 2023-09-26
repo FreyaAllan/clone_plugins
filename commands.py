@@ -3,6 +3,7 @@ import logging
 import random
 import asyncio
 from Script import script
+from pyrogram.file_id import FileId
 from pyrogram import Client, filters, enums
 from pyrogram.errors import ChatAdminRequired, FloodWait
 from pyrogram.types import *
@@ -38,7 +39,7 @@ async def start(client, message):
             await settings_menu(client, message, int(group_id))
         elif len(message.command) == 2 and message.command[1].startswith('file'):
             _, base64_string = message.command[1].split("_")
-            string = decode(base64_string)
+            string = FileId.decode(base64_string)
             file_unique_id, group_id = string.split("#")
             settings = await get_settings(int(group_id))
             file = await get_file_details(file_unique_id)
@@ -66,7 +67,7 @@ async def start(client, message):
                 )
         elif len(message.command) == 2 and message.command[1].startswith('shortlink'):
             _, base64_string = message.command[1].split("_")
-            string = decode(base64_string)
+            string = FileId.decode(base64_string)
             file_unique_id, group_id = string.split("#")
             settings = await get_settings(int(group_id))
             file = await get_file_details(file_unique_id)
