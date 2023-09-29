@@ -50,7 +50,7 @@ async def start(client, message):
                 file_size = get_size(file['file_size'])
             )
             if settings['shortlink']:
-                link = await get_shortlink(int(group_id), f"https://telegram.me/{temp.BOT_USERNAME}?start=shortlink_{base64_string}")
+                link = await get_shortlink(int(group_id), f"https://telegram.me/{clonedme.BOT_USERNAME}?start=shortlink_{base64_string}")
                 btn = [[
                     InlineKeyboardButton("✨ ᴅᴏᴡɴʟᴏᴀᴅ ✨", url=link)
                 ]]
@@ -88,7 +88,7 @@ async def start(client, message):
             )
         else:
             buttons = [[
-                InlineKeyboardButton('+ ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ɢʀᴏᴜᴘ +', url=f'http://t.me/{temp.BOT_USERNAME}?startgroup=start')
+                InlineKeyboardButton('+ ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ɢʀᴏᴜᴘ +', url=f'http://t.me/{clonedme.BOT_USERNAME}?startgroup=start')
             ],[
                 InlineKeyboardButton('👨‍🔧 ᴜᴘᴅᴀᴛᴇs 👨‍🔧', url=UPDATES_CHANNEL_LINK),
                 InlineKeyboardButton('📄 ᴀʙᴏᴜᴛ 📄', callback_data='about')
