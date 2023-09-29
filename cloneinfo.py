@@ -4,6 +4,7 @@ from Script import script
 from info import *
 from dotenv import load_dotenv
 from typing import Union
+import os
 
 # For Local Deploy
 if os.path.exists(".env"):
