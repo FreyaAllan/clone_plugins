@@ -3,6 +3,28 @@ from os import environ
 from Script import script 
 from info import *
 
+
+load_dotenv("./.env")
+
+
+def make_list(text: str, convert_int: bool = False) -> list:
+    if convert_int:
+        return [int(x) for x in text.split()]
+    return text.split()
+
+
+def get_config(key: str, default: str = None, is_bool: bool = False) -> Union[str, bool]:  # type: ignore
+    value = environ.get(key)
+    if value is None:
+        return default
+    if is_bool:
+        if value.lower() in ["true", "1", "on", "yes"]:
+            return True
+        elif value.lower() in ["false", "0", "off", "no"]:
+            return False
+        else:
+            raise ValueError
+    return value
 id_pattern = re.compile(r'^.\d+$')
 def is_enabled(value, default):
     if value.lower() in ["true", "yes", "1", "enable", "y"]:
