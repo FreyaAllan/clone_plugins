@@ -48,43 +48,34 @@ class Config:
     SPELL_IMG = SPELL_IMG
 
 # Admins, Channels & Users
-    ADMINS = [int(admin) if id_pattern.search(admin) else admin for admin in environ.get('ADMINS', '').split()]
-    CHANNELS = [int(ch) if id_pattern.search(ch) else ch for ch in environ.get('CHANNELS', '').split()]
-    auth_users = [int(user) if id_pattern.search(user) else user for user in environ.get('AUTH_USERS', '').split()]
-    AUTH_USERS = (auth_users + ADMINS) if auth_users else []
-    PREMIUM_USER = [int(user) if id_pattern.search(user) else user for user in environ.get('PREMIUM_USER', '').split()]
-    auth_channel = environ.get('AUTH_CHANNEL')
-    auth_grp = environ.get('AUTH_GROUP')
-    AUTH_CHANNEL = int(auth_channel) if auth_channel and id_pattern.search(auth_channel) else None
-    AUTH_GROUPS = [int(ch) for ch in auth_grp.split()] if auth_grp else None
-    support_chat_id = environ.get('SUPPORT_CHAT_ID', '')
-    reqst_channel = environ.get('REQST_CHANNEL_ID', '')
-    REQST_CHANNEL = int(reqst_channel) if reqst_channel and id_pattern.search(reqst_channel) else None
-    SUPPORT_CHAT_ID = int(support_chat_id) if support_chat_id and id_pattern.search(support_chat_id) else None
-    NO_RESULTS_MSG = bool(environ.get("NO_RESULTS_MSG", False))
+    ADMINS = ADMINS
+    CHANNELS = CHANNELS
+    AUTH_USERS = AUTH_USERS
+    AUTH_CHANNEL = AUTH_CHANNEL
+    AUTH_GROUPS = AUTH_GROUPS
+    REQST_CHANNEL = REQST_CHANNEL_ID
+    SUPPORT_CHAT_ID = SUPPORT_CHAT_ID
+    NO_RESULTS_MSG = NO_RESULTS_MSG
 
 # MongoDB information
     DATABASE_URI = DATABASE_URI
-    DATABASE_NAME = environ.get('DATABASE_NAME', "")
-    COLLECTION_NAME = environ.get('COLLECTION_NAME', 'Telegram_files')
+    DATABASE_NAME = DATABASE_NAME
+    COLLECTION_NAME = COLLECTION_NAME
 
 # Others
-    VERIFY = bool(environ.get('VERIFY', False))
-    SHORTLINK_URL = environ.get('SHORTLINK_URL', 'mplaylink.com')
-    SHORTLINK_API = environ.get('SHORTLINK_API', '1f1da5c9df9a58058w672acw8d8134e203b03426a1')
-    SECOND_SHORTLINK_URL = environ.get('SECOND_SHORTLINK_URL', 'mplaylink.com')
-    SECOND_SHORTLINK_API = environ.get('SECOND_SHORTLINK_API', '1f1da5c9df9a58058672a3c8ed8134e203b03426a1')
-    IS_SHORTLINK = bool(environ.get('IS_SHORTLINK', True))
-    DELETE_CHANNELS = [int(dch) if id_pattern.search(dch) else dch for dch in environ.get('DELETE_CHANNELS', '0').split()]
-    MAX_B_TN = environ.get("MAX_B_TN", "5")
-    MAX_BTN = is_enabled((environ.get('MAX_BTN', "True")), True)
-    PORT = environ.get("PORT", "8080")
-    GRP_LNK = environ.get('GRP_LNK', 'https://t.me/+ps2An00KwZYwNTRl')
-    CHNL_LNK = environ.get('CHNL_LNK', 'https://t.me/TeamHMT_Bots')
-    TUTORIAL = environ.get('TUTORIAL', 'https://t.me/Team_HMT/8')
-    IS_TUTORIAL = bool(environ.get('IS_TUTORIAL', True))
-    MSG_ALRT = environ.get('MSG_ALRT', 'Wʜᴀᴛ Aʀᴇ Yᴏᴜ Lᴏᴏᴋɪɴɢ Aᴛ ?')
-    LOG_CHANNEL = int(environ.get('LOG_CHANNEL', ''))
+    VERIFY = VERIFY
+    SHORTLINK_URL = SHORTLINK_URL
+    SHORTLINK_API = SHORTLINK_API
+    IS_SHORTLINK = IS_SHORTLINK
+    DELETE_CHANNELS = DELETE_CHANNELS
+    MAX_B_TN = MAX_B_TN
+    MAX_BTN = MAX_BTN
+    GRP_LNK = GRP_LNK
+    CHNL_LNK = CHNL_LNK
+    TUTORIAL = TUTORIAL
+    IS_TUTORIAL = IS_TUTORIAL
+    MSG_ALRT = MSG_ALRT
+    LOG_CHANNEL = LOG_CHANNEL
     SUPPORT_CHAT = environ.get('SUPPORT_CHAT', '+r9ArDaaCETE0OGU9')
     P_TTI_SHOW_OFF = is_enabled((environ.get('P_TTI_SHOW_OFF', "False")), False)
     IMDB = is_enabled((environ.get('IMDB', "True")), True)
