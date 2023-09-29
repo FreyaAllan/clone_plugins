@@ -5,7 +5,9 @@ from info import *
 from dotenv import load_dotenv
 from typing import Union
 
-load_dotenv("./.env")
+# For Local Deploy
+if os.path.exists(".env"):
+    load_dotenv(".env")
 
 
 def make_list(text: str, convert_int: bool = False) -> list:
