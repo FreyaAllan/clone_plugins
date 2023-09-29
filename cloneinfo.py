@@ -3,6 +3,7 @@ from os import environ
 from Script import script 
 from info import *
 from dotenv import load_dotenv
+from typing import Union
 
 load_dotenv("./.env")
 
