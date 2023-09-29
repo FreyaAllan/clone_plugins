@@ -2,7 +2,7 @@ import re
 from os import environ
 from Script import script 
 from info import *
-
+from dotenv import load_dotenv
 
 load_dotenv("./.env")
 
