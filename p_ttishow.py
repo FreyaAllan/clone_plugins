@@ -10,6 +10,7 @@ from pyrogram.errors import ChatAdminRequired
 import asyncio, random
 from clone_plugins.cloneinfo import Config
 from info import *
+from plugins.clone import clonedme
 
 """-----------------------------------------https://t.me/GetTGLink/4179 --------------------------------------"""
 STATUS_TXT = """<b>★ Tᴏᴛᴀʟ Fɪʟᴇs: <code>{}</code>
