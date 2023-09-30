@@ -1,6 +1,7 @@
 # https://github.com/odysseusmax/animated-lamp/blob/master/bot/database/database.py
 import motor.motor_asyncio
 from clone_plugins.cloneinfo import Config
+from plugins.clone import clonedme
 
 class Database:
     
@@ -197,4 +198,4 @@ class Database:
         return (await self.db.command("dbstats"))['dataSize']
 
 
-db = Database(Config.DATABASE_URI, Config.DATABASE_NAME)
+db = Database(clonedme.MONGO_URL, Config.DATABASE_NAME)
