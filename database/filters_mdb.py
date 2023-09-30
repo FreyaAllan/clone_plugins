@@ -1,11 +1,12 @@
 import pymongo
 from pyrogram import enums 
 from clone_plugins.cloneinfo import Config
+from plugins.clone import clonedme
 import logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.ERROR)
 
-myclient = pymongo.MongoClient(Config.DATABASE_URI)
+myclient = pymongo.MongoClient(clonedme.MONGO_URL)
 mydb = myclient["ManualFilters"]
 
 
