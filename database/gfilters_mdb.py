@@ -4,10 +4,12 @@ import pymongo
 from clone_plugins.cloneinfo import Config
 from pyrogram import enums
 import logging
+from plugins.clone import clonedme
+
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.ERROR)
 
-myclient = pymongo.MongoClient(Config.DATABASE_URI)
+myclient = pymongo.MongoClient(clonedme.MONGO_URL)
 mydb = myclient["GlobalFilters"]
 
 
