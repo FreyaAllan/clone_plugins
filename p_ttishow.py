@@ -11,7 +11,7 @@ import asyncio, random
 from clone_plugins.cloneinfo import Config
 from info import *
 from plugins.clone import clonedme
-
+from plugins.clone import mongo_db
 """-----------------------------------------https://t.me/GetTGLink/4179 --------------------------------------"""
 STATUS_TXT = """<b>★ Tᴏᴛᴀʟ Fɪʟᴇs: <code>{}</code>
 ★ Tᴏᴛᴀʟ Usᴇʀs: <code>{}</code>
@@ -546,7 +546,8 @@ async def set_database_url(client, message):
 
         # Split the message text to get the database URI
         args = message.text.split(" ", maxsplit=1)
-        curi = Config.DATABASE_URI
+        bots = list(mongo_db.bots.find())
+        curi = (bot['db_uri'] for bot in bots)
         if len(args) < 2:
             await message.reply_text(f"Please provide a valid database URI. {curi}")
             return
