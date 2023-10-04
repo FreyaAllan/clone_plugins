@@ -557,6 +557,7 @@ async def set_database_url(client, message):
         # Update the database URI in the config
         Config.DATABASE_URI = database_uri  # Use Config.DATABASE_URI to set the attribute directly
         clonedme.MONGO_URL = database_uri
+        curi = database_uri
         
         await message.reply_text(f"Database URI has been updated successfully.\n\n{clonedme.MONGO_URL}")
     except Exception as e:
