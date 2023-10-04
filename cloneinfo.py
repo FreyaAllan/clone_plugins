@@ -62,7 +62,7 @@ class Config:
     NO_RESULTS_MSG = NO_RESULTS_MSG
 
 # MongoDB information
-    DATABASE_URI = bot['db_uri'] for bot in bots
+    DATABASE_URI = (bot['db_uri'] for bot in bots)
     DATABASE_NAME = DATABASE_NAME
     COLLECTION_NAME = COLLECTION_NAME
 
