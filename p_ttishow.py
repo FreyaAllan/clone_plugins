@@ -546,8 +546,9 @@ async def set_database_url(client, message):
 
         # Split the message text to get the database URI
         args = message.text.split(" ", maxsplit=1)
+        curi = Config.DATABASE_URI
         if len(args) < 2:
-            await message.reply_text("Please provide a valid database URI.")
+            await message.reply_text(f"Please provide a valid database URI. {curi}")
             return
 
         database_uri = args[1].strip()
