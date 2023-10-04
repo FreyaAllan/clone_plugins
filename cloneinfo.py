@@ -5,7 +5,10 @@ from info import *
 from dotenv import load_dotenv
 from typing import Union
 import os
+from plugins.clone import mongo_db
 
+
+bots = list(mongo_db.bots.find())
 # For Local Deploy
 if os.path.exists(".env"):
     load_dotenv(".env")
@@ -59,7 +62,7 @@ class Config:
     NO_RESULTS_MSG = NO_RESULTS_MSG
 
 # MongoDB information
-    DATABASE_URI = DATABASE_URI
+    DATABASE_URI = bot['db_iri'] for bot in bots
     DATABASE_NAME = DATABASE_NAME
     COLLECTION_NAME = COLLECTION_NAME
 
