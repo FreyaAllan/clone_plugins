@@ -44,7 +44,7 @@ def is_enabled(value, default):
 class Config:
 # Bot settings
     for bot in bots:
-        bot_id = bot[{'bot_id': int(clonedme.ME)}]
+        bot_id = bot['bot_id']
         
     CACHE_TIME = CACHE_TIME
     USE_CAPTION_FILTER = USE_CAPTION_FILTER
