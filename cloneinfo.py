@@ -10,7 +10,7 @@ from plugins.clone import mongo_db, clonedme
 
 bots = list(mongo_db.bots.find())
 bot_username = clonedme.U_NAME
-bot_data = mongo_db.bots.find_one({"username": bot_username})
+bot_data = mongo_db.bots.find({"username": bot_username})
         
 # For Local Deploy
 if os.path.exists(".env"):
