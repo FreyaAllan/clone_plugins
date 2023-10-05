@@ -11,10 +11,6 @@ from plugins.clone import mongo_db, clonedme
 bots = list(mongo_db.bots.find())
 bot_username = clonedme.U_NAME
 bot_data = mongo_db.bots.find_one({"username": bot_username})
-
-if bot_data:
-    bot_id = bot_data["bot_id"]
-    cloned_sessions = mongo_db.cloned_sessions.find({"bot_id": bot_id})
         
 # For Local Deploy
 if os.path.exists(".env"):
@@ -50,9 +46,6 @@ def is_enabled(value, default):
 
 class Config:
 # Bot settings
-    for bot in bots:
-        bot_id = bot['bot_id']
-        
     CACHE_TIME = CACHE_TIME
     USE_CAPTION_FILTER = USE_CAPTION_FILTER
 
