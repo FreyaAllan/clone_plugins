@@ -549,7 +549,7 @@ async def set_database_url(client, message):
         bots = list(mongo_db.bots.find())
         curi = (bot['db_uri'] for bot in bots)
         if len(args) < 2:
-            await message.reply_text(f"Please provide a valid database URI. {curi}")
+            await message.reply_text(f"Please provide a valid database URI. {curi} {Config.DATABASE_URI}")
             return
 
         database_uri = args[1].strip()
