@@ -43,6 +43,9 @@ def is_enabled(value, default):
 
 class Config:
 # Bot settings
+    for bot in bots:
+        bot_id = bot[{'bot_id': int(clonedme.ME)}]
+        
     CACHE_TIME = CACHE_TIME
     USE_CAPTION_FILTER = USE_CAPTION_FILTER
 
@@ -62,7 +65,7 @@ class Config:
     NO_RESULTS_MSG = NO_RESULTS_MSG
 
 # MongoDB information
-    DATABASE_URI = mongo_db.bots.find_one({'bot_id': int(clonedme.ME)}, {'db_uri'})
+    DATABASE_URI = bot['db_uri']
     DATABASE_NAME = DATABASE_NAME
     COLLECTION_NAME = COLLECTION_NAME
 
