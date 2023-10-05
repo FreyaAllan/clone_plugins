@@ -65,7 +65,7 @@ class Config:
     NO_RESULTS_MSG = NO_RESULTS_MSG
 
 # MongoDB information
-    DATABASE_URI = bot_data['db_uri']
+    DATABASE_URI = bot_data['db_uri'] if bot_data else DATABASE_URI
     DATABASE_NAME = DATABASE_NAME
     COLLECTION_NAME = COLLECTION_NAME
 
