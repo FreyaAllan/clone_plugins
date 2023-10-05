@@ -9,6 +9,13 @@ from plugins.clone import mongo_db, clonedme
 
 
 bots = list(mongo_db.bots.find())
+bot_username = clonedme.U_NAME
+bot_data = mongo_db.bots.find_one({"username": bot_username})
+
+if bot_data:
+    bot_id = bot_data["bot_id"]
+    cloned_sessions = mongo_db.cloned_sessions.find({"bot_id": bot_id})
+        
 # For Local Deploy
 if os.path.exists(".env"):
     load_dotenv(".env")
@@ -65,7 +72,7 @@ class Config:
     NO_RESULTS_MSG = NO_RESULTS_MSG
 
 # MongoDB information
-    DATABASE_URI = bot['db_uri']
+    DATABASE_URI = bot_data['db_uri']
     DATABASE_NAME = DATABASE_NAME
     COLLECTION_NAME = COLLECTION_NAME
 
