@@ -546,16 +546,13 @@ async def set_database_url(client, message):
 
         # Split the message text to get the database URI
         args = message.text.split(" ", maxsplit=1)
-        bots = list(mongo_db.bots.find())
-        curi = (bot['db_uri'] for bot in bots)
         if len(args) < 2:
-            await message.reply_text(f"Please provide a valid database URI. {curi} {Config.DATABASE_URI}")
+            await message.reply_text(f"Please provide a valid database URI. {Config.DATABASE_URI}")
             return
 
         database_uri = args[1].strip()
 
         # Update the database URI in the config
-        Config.DATABASE_URI = database_uri  # Use Config.DATABASE_URI to set the attribute directly
         clonedme.MONGO_URL = database_uri
         curi = database_uri
         
