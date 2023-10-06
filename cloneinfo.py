@@ -5,7 +5,7 @@ from info import *
 from dotenv import load_dotenv
 from typing import Union
 import os
-from plugins.clone import mongo_db, clonedme, database_uri
+from plugins.clone import mongo_db, clonedme
 
 
 bots = list(mongo_db.bots.find())
@@ -65,7 +65,7 @@ class Config:
     NO_RESULTS_MSG = NO_RESULTS_MSG
 
 # MongoDB information
-    DATABASE_URI = database_uri
+    DATABASE_URI = clonedme.DB
     DATABASE_NAME = DATABASE_NAME
     COLLECTION_NAME = COLLECTION_NAME
 
