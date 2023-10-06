@@ -538,24 +538,24 @@ async def plist_users(bot, message):
 @Client.on_message(filters.command(["adddb"]))
 #@Client.on_message(filters.command("DATABASE_URI") & filters.private)
 async def set_database_url(client, message):
-    try:
-        user_id = message.from_user.id
-        if user_id not in Config.ADMINS:
-            await message.reply_text("You are not authorized to use this command.")
-            return
+#    try:
+#        user_id = message.from_user.id
+#        if user_id not in Config.ADMINS:
+#            await message.reply_text("You are not authorized to use this command.")
+#            return
 
         # Split the message text to get the database URI
-        args = message.text.split(" ", maxsplit=1)
-        if len(args) < 2:
-            await message.reply_text(f"Please provide a valid database URI. {Config.DATABASE_URI}\n{clonedme.DB}")
-            return
+#        args = message.text.split(" ", maxsplit=1)
+#        if len(args) < 2:
+    await message.reply_text(f"Please provide a valid database URI. {Config.DATABASE_URI}\n{clonedme.DB}")
+#            return
 
-        database_uri = args[1].strip()
+#        database_uri = args[1].strip()
 
         # Update the database URI in the config
-        clonedme.DB = database_uri
+#        clonedme.DB = database_uri
         
-        await message.reply_text(f"Database URI has been updated successfully.\n\n{clonedme.DB}")
-    except Exception as e:
-        logging.exception("Error while setting database URI.")
-        await message.reply_text("An error occurred while setting the database URI.")
+#        await message.reply_text(f"Database URI has been updated successfully.\n\n{clonedme.DB}")
+#    except Exception as e:
+#        logging.exception("Error while setting database URI.")
+#        await message.reply_text("An error occurred while setting the database URI.")
