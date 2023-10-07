@@ -1,7 +1,7 @@
 import re
 from pyrogram import filters, Client, enums
 from pyrogram.errors.exceptions.bad_request_400 import ChannelInvalid, UsernameInvalid, UsernameNotModified
-from info import ADMINS, LOG_CHANNEL, FILE_STORE_CHANNEL, PUBLIC_FILE_STORE, Config
+from info import ADMINS, LOG_CHANNEL, FILE_STORE_CHANNEL, PUBLIC_FILE_STORE
 from clone_plugins.database.ia_filterdb import unpack_new_file_id
 from plugins.clone import clonedme
 import re
@@ -9,6 +9,7 @@ import os
 import json
 import base64
 import logging
+from cloneinfo import Config
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
