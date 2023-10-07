@@ -10,8 +10,8 @@ from clone_plugins.database.filters_mdb import(
 
 from clone_plugins.database.connections_mdb import active_connection
 from utils import get_file_id, parser, split_quotes
-from info import ADMINS, Config
-
+from info import ADMINS
+from cloneinfo import Config
 
 @Client.on_message(filters.command(['filter', 'add']) & filters.incoming)
 async def addfilter(client, message):
