@@ -1,7 +1,7 @@
 from pyrogram import Client, filters
 from info import CHANNELS
 from clone_plugins.database.ia_filterdb import save_file
-from cloneinfo import Config
+from clone_plugins.cloneinfo import Config
 
 media_filter = filters.document | filters.video | filters.audio
 
