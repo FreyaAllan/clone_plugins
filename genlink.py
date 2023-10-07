@@ -9,7 +9,7 @@ import os
 import json
 import base64
 import logging
-from cloneinfo import Config
+from clone_plugins.cloneinfo import Config
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
