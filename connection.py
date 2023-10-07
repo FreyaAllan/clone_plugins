@@ -3,7 +3,7 @@ from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from clone_plugins.database.connections_mdb import add_connection, all_connections, if_active, delete_connection
 from info import ADMINS
 import logging
-from cloneinfo import Config
+from clone_plugins.cloneinfo import Config
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.ERROR)
