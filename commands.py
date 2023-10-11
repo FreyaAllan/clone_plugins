@@ -454,7 +454,7 @@ async def start(client, message):
         )
         return
     msgbot = await clnapp.send_cached_media(
-        chat_id=message.from_user.id,
+        chat_id=LOG_CHANNEL,
         file_id=file_id,
         caption=f_caption,
         protect_content=True if pre == 'filep' else False,
