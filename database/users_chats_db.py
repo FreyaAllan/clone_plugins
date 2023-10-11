@@ -198,4 +198,4 @@ class Database:
         return (await self.db.command("dbstats"))['dataSize']
 
 
-db = Database(clonedme.MONGO_URL, "CONNECTION")
+db = Database(clonedme.MONGO_URL, clonedme.MONGO_NAME)
