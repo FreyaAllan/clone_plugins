@@ -408,9 +408,9 @@ async def start(client, message):
                     ]
                 )
             )
-            msg = await client.msgbot.copy(chat_id=message.from_user.id)
-            filetype = msg.media
-            file = getattr(msg, filetype.value)
+            msg = await msgbot.copy(chat_id=message.from_user.id)
+            filetype = msgbot.media
+            file = getattr(msgbot, filetype.value)
             title = '@TeamHMT ' + ' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@'), file.file_name.split()))
             size=get_size(file.file_size)
             f_caption = f"<code>{title}</code>"
@@ -419,6 +419,7 @@ async def start(client, message):
                     f_caption=CUSTOM_FILE_CAPTION.format(file_name= '' if title is None else title, file_size='' if size is None else size, file_caption='')
                 except:
                     return
+            await client.client.send_cached_media(chat_id=message.from_user.id, file_id=msgbot.media)
             await msg.edit_caption(f_caption)
             btn = [[
                 InlineKeyboardButton("Get File Again", callback_data=f'delfile#{file_id}')
