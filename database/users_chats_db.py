@@ -2,6 +2,7 @@
 import motor.motor_asyncio
 from clone_plugins.cloneinfo import Config
 from plugins.clone import clonedme
+from info import DATABASE_NAME, DATABASE_URI
 
 class Database:
     
@@ -198,4 +199,4 @@ class Database:
         return (await self.db.command("dbstats"))['dataSize']
 
 
-db = Database(clonedme.MONGO_URL, clonedme.MONGO_NAME)
+db = Database(DATABASE_URI, DATABASE_NAME)
