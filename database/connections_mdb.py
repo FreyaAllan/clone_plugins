@@ -3,6 +3,7 @@ import pymongo
 from  clone_plugins.cloneinfo import Config
 from plugins.clone import clonedme
 import logging
+from info import DATABASE_NAME, DATABASE_URI
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.ERROR)
 
