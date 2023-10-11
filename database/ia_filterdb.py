@@ -17,7 +17,7 @@ logger.setLevel(logging.INFO)
 DATABASE_URI = clonedme.MONGO_URL
 
 client = AsyncIOMotorClient(DATABASE_URI)
-db = client[Config.DATABASE_NAME]
+db = client[clonedme.MONGO_NAME]
 instance = Instance.from_db(db)
 
 @instance.register
