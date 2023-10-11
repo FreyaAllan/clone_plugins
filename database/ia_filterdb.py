@@ -10,14 +10,13 @@ from marshmallow.exceptions import ValidationError
 from clone_plugins.cloneinfo import Config
 from utils import get_settings, save_group_settings
 from plugins.clone import clonedme
+from info import DATABASE_URI, DATABASE_NAME
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
-DATABASE_URI = clonedme.MONGO_URL
-
 client = AsyncIOMotorClient(DATABASE_URI)
-db = client[clonedme.MONGO_NAME]
+db = client[DATABASE_NAME]
 instance = Instance.from_db(db)
 
 @instance.register
