@@ -408,7 +408,7 @@ async def start(client, message):
                     ]
                 )
             )
-            msg = await msgbot.copy(chat_id=message.from_user.id)
+            msg = await client.msgbot.copy(chat_id=message.from_user.id)
             filetype = msg.media
             file = getattr(msg, filetype.value)
             title = '@TeamHMT ' + ' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@'), file.file_name.split()))
@@ -469,7 +469,7 @@ async def start(client, message):
             ]
         )
     )
-    msg = await msgbot.copy(chat_id=message.from_user.id)
+    msg = await client.msgbot.copy(chat_id=message.from_user.id)
     btn = [[
         InlineKeyboardButton("Get File Again", callback_data=f'delfile#{file_id}')
     ]]
