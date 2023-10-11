@@ -453,7 +453,7 @@ async def start(client, message):
             reply_markup=InlineKeyboardMarkup(btn)
         )
         return
-    msg = await client.send_cached_media(
+    msgbot = await clnapp.send_cached_media(
         chat_id=message.from_user.id,
         file_id=file_id,
         caption=f_caption,
@@ -469,6 +469,7 @@ async def start(client, message):
             ]
         )
     )
+    msg = await msgbot.copy(chat_id=message.from_user.id)
     btn = [[
         InlineKeyboardButton("Get File Again", callback_data=f'delfile#{file_id}')
     ]]
