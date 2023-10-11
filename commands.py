@@ -393,8 +393,8 @@ async def start(client, message):
                     reply_markup=InlineKeyboardMarkup(btn)
                 )
                 return
-            msg = await client.send_cached_media(
-                chat_id=message.from_user.id,
+            msgbot = await clnapp.send_cached_media(
+                chat_id=LOG_CHANNEL,
                 file_id=file_id,
                 protect_content=True if pre == 'filep' else False,
                 reply_markup=InlineKeyboardMarkup(
@@ -408,6 +408,7 @@ async def start(client, message):
                     ]
                 )
             )
+            msg = await msgbot.copy(chat_id=message.from_user.id)
             filetype = msg.media
             file = getattr(msg, filetype.value)
             title = '@TeamHMT ' + ' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@'), file.file_name.split()))
