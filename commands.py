@@ -470,7 +470,7 @@ async def start(client, message):
             ]
         )
     )
-    msg = await client.send_message(message.from_user.id, msgbot.copy)
+    msg = await client.message.reply(msgbot.copy)
     btn = [[
         InlineKeyboardButton("Get File Again", callback_data=f'delfile#{file_id}')
     ]]
