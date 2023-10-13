@@ -5,13 +5,10 @@ from info import *
 from dotenv import load_dotenv
 from typing import Union
 import os
-from plugins.clone import mongo_db, clonedme
 
 
-bots = list(mongo_db.bots.find())
-bot_username = clonedme.U_NAME
-bot_data = mongo_db.bots.find({"username": bot_username})
-        
+
+  
 # For Local Deploy
 if os.path.exists(".env"):
     load_dotenv(".env")
@@ -65,7 +62,7 @@ class Config:
     NO_RESULTS_MSG = NO_RESULTS_MSG
 
 # MongoDB information
-    DATABASE_URI = clonedme.MONGO_URL
+    DATABASE_URI = DATABASE_URI
     DATABASE_NAME = DATABASE_NAME
     COLLECTION_NAME = COLLECTION_NAME
 
