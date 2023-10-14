@@ -41,7 +41,7 @@ def is_enabled(value, default):
     else:
         return default
 
-class Config(key, value):
+class Config(object):
 # Bot settings
     CACHE_TIME: CACHE_TIME
     USE_CAPTION_FILTER: USE_CAPTION_FILTER
