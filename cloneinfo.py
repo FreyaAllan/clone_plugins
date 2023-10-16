@@ -13,33 +13,16 @@ import os
 if os.path.exists(".env"):
     load_dotenv(".env")
 
+bots = list(mongo_db.bots.find())
+    for bot in bots:
+        bot_token = bot['token']
+        try:
+            ai = Client(
+                f"{bot_token}", API_ID, API_HASH,
+                bot_token=bot_token,
+                plugins={"root": "clone_plugins"},
+            )
 
-def make_list(text: str, convert_int: bool = False) -> list:
-    if convert_int:
-        return [int(x) for x in text.split()]
-    return text.split()
-
-
-def get_config(key: str, default: str = None, is_bool: bool = False) -> Union[str, bool]:  # type: ignore
-    value = environ.get(key)
-    if value is None:
-        return default
-    if is_bool:
-        if value.lower() in ["true", "1", "on", "yes"]:
-            return True
-        elif value.lower() in ["false", "0", "off", "no"]:
-            return False
-        else:
-            raise ValueError
-    return value
-id_pattern = re.compile(r'^.\d+$')
-def is_enabled(value, default):
-    if value.lower() in ["true", "yes", "1", "enable", "y"]:
-        return True
-    elif value.lower() in ["false", "no", "0", "disable", "n"]:
-        return False
-    else:
-        return default
 
 class Config:
 # Bot settings
