@@ -5,9 +5,8 @@ from info import *
 from dotenv import load_dotenv
 from typing import Union
 import os
-from plugins.clone import clonedme, mongo_db
-
-
+mongo_client = MongoClient(DATABASE_URI)
+mongo_db = mongo_client["cloned_bots"]
   
 # For Local Deploy
 if os.path.exists(".env"):
