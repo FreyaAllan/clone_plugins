@@ -2,6 +2,7 @@ import re
 from os import environ
 from Script import script 
 from pymongo import MongoClient
+from pyrogram import Client, filters
 from info import *
 from dotenv import load_dotenv
 from typing import Union
