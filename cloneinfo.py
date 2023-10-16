@@ -22,6 +22,7 @@ bots = list(mongo_db.bots.find())
                 bot_token=bot_token,
                 plugins={"root": "clone_plugins"},
             )
+            bot = await ai.get_me()
 
 
 class Config:
