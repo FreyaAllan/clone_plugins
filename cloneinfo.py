@@ -13,15 +13,15 @@ if os.path.exists(".env"):
     load_dotenv(".env")
 
 bots = list(mongo_db.bots.find())
-    for bot in bots:
-        bot_token = bot['token']
-        try:
-            ai = Client(
-                f"{bot_token}", API_ID, API_HASH,
-                bot_token=bot_token,
-                plugins={"root": "clone_plugins"},
-            )
-            bot = await ai.get_me()
+for bot in bots:
+bot_token = bot['token']
+    try:
+    ai = Client(
+        f"{bot_token}", API_ID, API_HASH,
+        bot_token=bot_token,
+        plugins={"root": "clone_plugins"},
+        )
+        bot = await ai.get_me()
 
 
 class Config:
